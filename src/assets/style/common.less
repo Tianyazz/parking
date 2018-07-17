@@ -1,0 +1,124 @@
+@import './global';
+/* 基础样式文件 */
+.container {
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  .font-size;
+  color: #666;
+  line-height: 1.5;
+  font-family: 'PingFangSC', 'PingFang SC Bold', 'Microsoft Yahei', Helvetica, Arial, sans-serif;
+}
+.container image {
+  max-width: 100%;
+  margin: 0 auto;
+}
+view, scroll-view, swiper, movable-view, cover-view, icon, text, rich-text, progress, 
+button, checkbox, form, input, label, picker, picker-view, radio, slider, switch, textarea, navigator {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* icon字体 */
+@font-face {
+  font-family: 'iconfont';  /* project id 630232 */
+  src: url('//at.alicdn.com/t/font_630232_7fdq5yczc4pwrk9.eot');
+  src: url('//at.alicdn.com/t/font_630232_7fdq5yczc4pwrk9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_630232_7fdq5yczc4pwrk9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_630232_7fdq5yczc4pwrk9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_630232_7fdq5yczc4pwrk9.svg#iconfont') format('svg');
+}
+.icon {
+  font-family: 'iconfont';
+  line-height: 1;
+}
+.none {
+  display: none;
+}
+/* 标题字体大小 */
+.font-36 { .font-size(36); }
+.font-30 { .font-size(30); }
+.font-24 { .font-size; }
+.font-22 { .font-size(22); }
+.font-20 { .font-size(20); }
+/* 字体颜色 */
+.col-f {
+  color: #fff;
+}
+.col-3 {
+  color: #333;
+}
+.col-r {
+  color: #ff4e4e;
+}
+.col-b {
+  color: #56b5ff;
+}
+.col-c {
+  color: #42d4eb;
+}
+.col-o {
+  color: #fc932c;
+}
+.col-g {
+  color: #6fb273;
+}
+/* 按钮 */
+button[type=primary] {
+  background-color: #ff4e4e;
+}
+.btn {
+  display: inline-block;
+  .height(80);
+  .font-size(30);
+  .line-height(80);
+  padding: 0 70rpx;
+  text-align: center;
+  color: #fff;
+}
+/* 背景色 */
+.bg-fff {
+  background: #fff;
+}
+/* 禁止点击 */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+/* 间距 */
+.mb-20 {
+  margin-bottom: 20rpx;
+}
+.mb-30 {
+  margin-bottom: 30rpx;
+}
+.pd-rl-20 {
+  padding: 0 20rpx;
+}
+
+/* 弹性盒子模型 */
+.flexs {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+.flex {
+  .flex;
+}
+.flex2 {
+  .flex(2)
+}
+.flex-wrap {
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+}
+/* flex内容水平垂直居中 */
+.flex-c-m {
+  .flexs;
+  .align-items;
+  .justify-content;
+}
+.j-end {
+  .flexs;
+  .justify-content(flex-end);
+}

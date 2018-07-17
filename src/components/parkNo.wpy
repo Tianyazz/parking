@@ -1,0 +1,213 @@
+<!-- 长泰停车 查询车牌 2018-05-23 -->
+<style lang="less">
+@import '../assets/style/global';
+.park-no {
+  position: relative;
+  z-index: 9;
+  margin: -50rpx 20rpx 30rpx;
+  padding: 20rpx 20rpx 50rpx;
+  .radius;
+  .shadow(0rpx, 0rpx, 20rpx, rgba(0, 0, 0, .15));
+  background: #fff;
+  >.flex-c-m {
+    .height(80);
+    margin: 20rpx 0 30rpx;
+    border: 2rpx solid #cacaca;
+    >view {
+      .height(46);
+      border-right: 2rpx solid #cacaca;
+      &.active {
+        position: relative;
+        color: #ff4e4e;
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          .translate(-50%, 0);
+          .width(16);
+          .height(2);
+          background: #ff4e4e;
+        }
+      }
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+  .history-no {
+    text {
+      position: relative;
+      .width(140);
+      .height(60);
+      margin: 0 20rpx 20rpx 0;
+      border: 2rpx solid #eee;
+      background: #eee;
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-top: 16rpx solid #ff4e4e;
+        border-right: 16rpx solid #ff4e4e;
+        border-left: 16rpx solid transparent;
+        border-bottom: 16rpx solid transparent;
+        opacity: 0;
+        .transition;
+      }
+      &.active {
+        border: 2rpx solid #ff4e4e;
+        color: #ff4e4e;
+        &::before {
+          opacity: 1;
+        }
+        &::after {
+          content: "\e93e";
+          position: absolute;
+          top: 0;
+          right: 6rpx;
+          display: block;
+          width: 16rpx;
+          height: 16rpx;
+          font-size: 24rpx;
+          font-family: 'iconfont';
+          line-height: 16rpx;
+          color: #fff;
+        }
+      }
+    }
+  }
+  >button {
+    margin-top: 20rpx;
+    width: 100%;
+    .radius(0);
+  }
+}
+</style>
+
+<template>
+  <view class="park-no">
+    <view class="font-30 col-3">请输入车牌号码：</view>
+    <view class="flex-c-m col-3 font-30">
+      <block wx:for="{{initData}}" wx:for-index="idx" wx:key="idx">
+        <view class="flex flex-c-m {{indexActive === idx ? 'active' : ''}}" bindtap="tapNo({{idx}})">{{item}}</view>
+      </block>
+    </view>
+    <view class="history-no flexs flex-wrap">
+      <text class="flex-c-m {{historyActive === -1 ? 'active' : ''}}" bindtap="tapHistoryNo('赣V777777', -1)">赣V777777</text>
+      <block wx:for="{{history}}" wx:for-index="idx" wx:key="idx">
+        <text class="flex-c-m {{historyActive === idx ? 'active' : ''}}" bindtap="tapHistoryNo({{item.car_plate_num}}, {{idx}})">{{item.car_plate_num}}</text>
+      </block>
+    </view>
+    <button class="btn" type="primary" bindtap="checkParkingFee">立即查询</button>
+    <keyall :isShow.sync="isShowKeyAll"
+    :keyShowCh.sync="keyShowCh"
+    :keyShowEn.sync="keyShowEn"
+    :keyIndex.sync="indexActive"
+    @closeKeyAll.user="closeKeyAll"
+    @addParkNo.user="addParkNo"
+    @deleteParkNo.user="deleteParkNo"></keyall>
+    <alert />
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import KeyAll from '@/components/keyAll'
+import Alert from '@/components/alert'
+import licensePlate from '@/api/licensePlate'
+export default class ParkNo extends wepy.component {
+  props = {
+    history: {
+      type: Array,
+      default: []
+    }
+  }
+  data = {
+    initData: ['沪', 'A', '', '', '', '', '', ''],
+    historyActive: -1, // 历史牌照选中
+    indexActive: -1, // 牌照选中的输入框
+    isShowKeyAll: false,
+    keyShowCh: true,
+    keyShowEn: true
+  }
+  components = {
+    keyall: KeyAll,
+    alert: Alert
+  }
+  methods = {
+    // 选择历史记录牌照
+    tapHistoryNo (no, index) {
+      this.historyActive = index
+      let historyNo = [...no]
+      if (historyNo.length === 7) historyNo.push('')
+      this.initData = historyNo
+      this.isShowKeyAll = false
+    },
+    // 点击牌照输入区域
+    tapNo (index) {
+      this.historyActive = -1
+      this.indexActive = index
+      this.isShowKeyAll = true
+      if (index === 0) {
+        this.keyShowCh = false
+        this.keyShowEn = true
+      } else {
+        this.keyShowCh = true
+        this.keyShowEn = false
+      }
+    },
+    // 点击键盘返回值，填充车牌
+    addParkNo (code) {
+      this.initData.splice(this.indexActive, 1, code)
+      if (this.indexActive === 0) {
+        this.keyShowCh = true
+        this.keyShowEn = false
+      }
+      if (this.indexActive < 7) {
+        this.indexActive++ // 当前输入框跳到下一个输入框
+      }
+    },
+    // 删除车牌
+    deleteParkNo () {
+      this.initData.splice(this.indexActive, 1, '')
+      this.indexActive--
+      if (this.indexActive === 0) {
+        this.keyShowCh = true
+        this.keyShowEn = true
+      }
+    },
+    // 关闭小键盘
+    closeKeyAll () {
+      this.close()
+    },
+    // 查询停车费
+    async checkParkingFee () {
+      for (let [index, val] of this.initData.entries()) {
+        if (index < 7 && val === '') return this.$invoke('alert', 'show', '请输入正确的车牌')
+      }
+      let parkNo = this.initData.join('')
+      this.close()
+      wepy.setStorage({key: 'parkNo', data: parkNo})
+      await licensePlate.InquiryFee({car_plate_num: parkNo})
+        .then(res => {
+          wepy.navigateTo({
+            url: '/pages/payment'
+          })
+        })
+        .catch(err => {
+          return this.$invoke('alert', 'show', err.message)
+        })
+    }
+  }
+  // 关闭键盘
+  close () {
+    this.isShowKeyAll = false
+    this.indexActive = -1
+  }
+}
+</script>

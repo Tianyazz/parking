@@ -1,0 +1,160 @@
+<!-- 所有省份简称、字母数字键盘 2018-05-23 -->
+<style lang="less">
+@import '../assets/style/global';
+.key-code {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 11;
+  width: 100%;
+  color: #000;
+  .transition;
+  .translate(0, 100%);
+  &.show {
+    .translate(0, 0);
+  }
+  .menu {
+    background: #e4e2e3;
+    padding: 26rpx 10rpx;
+    &:last-child {
+      view:nth-child(2),
+      view:nth-child(3) {
+        text { margin: 0 5rpx }
+      }
+    }
+  }
+  view.flexs {
+    margin-bottom: 26rpx;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  text {
+    .height(62);
+    .flexs;
+    .justify-content;
+    .align-items;
+    .radius;
+    .shadow(3rpx, 3rpx, 5rpx, rgba(0, 0, 0, .2));
+    margin: 0 6rpx;
+    background: #fff;
+    &.collapse {
+      visibility: collapse;
+    }
+  }
+  button {
+    .height(62);
+    .line-height(62);
+    padding: 0;
+    margin: 0 6rpx;
+    color: #fff;
+    background: #4085c8;
+  }
+}
+</style>
+
+<template>
+  <view class="key-code {{isShow ? 'show' : ''}}">
+    <view class="menu" hidden="{{keyShowCh}}">
+      <view class="flexs">
+        <block wx:for="{{keyList1}}" wx:for-index="idx" wx:key="`1${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+      </view>
+      <view class="flexs">
+        <block wx:for="{{keyList2}}" wx:for-index="idx" wx:key="`2${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+      </view>
+      <view class="flexs">
+        <text class="flex collapse"></text>
+        <block wx:for="{{keyList3}}" wx:for-index="idx" wx:key="`3${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+        <text class="flex collapse"></text>
+      </view>
+      <view class="flexs">
+        <text class="flex collapse"></text>
+        <text class="flex collapse"></text>
+        <block wx:for="{{keyList4}}" wx:for-index="idx" wx:key="`4${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+        <text class="flex collapse"></text>
+        <text class="flex collapse"></text>
+      </view>
+    </view>
+    <view class="menu" hidden="{{keyShowEn}}">
+      <view class="flexs">
+        <block wx:for="{{keyList5}}" wx:for-index="idx" wx:key="`5${idx}`">
+          <text class="flex {{keyIndex === 1 ? 'disabled' : ''}}" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+      </view>
+      <view class="flexs">
+        <block wx:for="{{keyList6}}" wx:for-index="idx" wx:key="`6${idx}`">
+          <text class="flex {{item === 'I' || item === 'O' ? 'disabled' : ''}}" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+      </view>
+      <view class="flexs">
+        <block wx:for="{{keyList7}}" wx:for-index="idx" wx:key="`7${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+      </view>
+      <view class="flexs">
+        <button class="flex2" type="primary" bindtap="close">完成</button>
+        <block wx:for="{{keyList8}}" wx:for-index="idx" wx:key="`8${idx}`">
+          <text class="flex" bindtap="tapKeyCode({{item}})">{{item}}</text>
+        </block>
+        <button class="flex2" type="primary" bindtap="delete">删除</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class KeyAll extends wepy.component {
+  props = {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    keyShowCh: {
+      type: Boolean,
+      default: false
+    },
+    keyShowEn: {
+      type: Boolean,
+      default: false
+    },
+    keyIndex: {
+      type: Number,
+      default: -1
+    }
+  }
+  data = {
+    keyList1: ['京', '沪', '津', '冀', '晋', '蒙', '辽', '吉', '黑', '苏'],
+    keyList2: ['浙', '皖', '闽', '赣', '鲁', '豫', '鄂', '湘', '粤', '贵'],
+    keyList3: ['琼', '渝', '川', '桂', '云', '藏', '陕', '甘'],
+    keyList4: ['青', '宁', '新', '港', '澳', '台'],
+    keyList5: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    keyList6: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'X'],
+    keyList7: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'C'],
+    keyList8: ['V', 'B', 'N', 'M', '港', '澳', '学']
+  }
+  methods = {
+    // 点击获取键盘值
+    tapKeyCode (code) {
+      if (code === 'I' || code === 'O') return false // 车牌不包含I、O两个字母
+      this.$emit('addParkNo', code)
+    },
+    // 完成，关闭小键盘
+    close () {
+      this.$emit('closeKeyAll')
+    },
+    // 删除车牌
+    delete () {
+      this.$emit('deleteParkNo')
+    }
+  }
+}
+</script>

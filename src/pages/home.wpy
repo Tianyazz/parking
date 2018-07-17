@@ -1,0 +1,125 @@
+<!-- 长泰停车 首页 2018-04-23 -->
+<style lang="less">
+@import '../assets/style/global';
+.home {
+  swiper, image {
+    .height(320);
+  }
+  image {
+    .width(640);
+  }
+  >.flexs {
+    margin-bottom: 10rpx;
+    >view {
+      width: 50%;
+      &:nth-child(2n + 1) {
+        padding: 0 10rpx 20rpx 20rpx;
+      }
+      &:nth-child(2n) {
+        padding: 0 20rpx 20rpx 10rpx;
+      }
+      &:last-child {
+        width: 100%;
+        padding: 0 20rpx 20rpx;
+      }
+      .flex-c-m {
+        .height(100);
+        .radius;
+        .shadow(0rpx, 0rpx, 20rpx, rgba(0, 0, 0, .15));
+      }
+      text {
+        .font-size(50);
+        margin-right: 30rpx;
+      }
+    }
+  }
+  .explanation {
+    margin: 0 25rpx 25rpx;
+    padding: 20rpx;
+    border: 3rpx dashed #fe4e4e;
+    .radius;
+  }
+}
+</style>
+
+<template>
+  <view class="container home">
+    <swiper indicator-dots="{{banner.indicatorDots}}"
+    autoplay="{{banner.autoplay}}" circular="{{banner.circular}}" interval="{{banner.interval}}" duration="{{banner.duration}}">
+      <block wx:for="{{banner.list}}" wx:for-index="idx" wx:key="idx">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image"/>
+        </swiper-item>
+      </block>
+    </swiper>
+    <parkno :history.sync="historyData"></parkno>
+    <view class="flexs flex-wrap">
+      <view @tap="getLocation"><view class="flex-c-m icon col-r"><text>&#xe61b;</text>反向寻车</view></view>
+      <view><navigator url="/pages/coupon" class="flex-c-m icon col-b"><text>&#xe618;</text>优惠券包</navigator></view>
+      <view><navigator url="/pages/integral" class="flex-c-m icon col-c"><text>&#xe616;</text>我的积分</navigator></view>
+      <view><navigator url="/pages/bill/bill" class="flex-c-m icon col-o"><text>&#xe61a;</text>历史账单</navigator></view>
+      <view @tap="scanCode"><view class="flex-c-m icon col-g"><text>&#xe61d;</text>扫码领券</view></view>
+    </view>
+    <view class="explanation">
+      <view><text class="font-24 col-3">缴费说明：</text></view>
+      <view><text class="font-20">自2017年8月1日起，长泰停车费调整至6元/小时；</text></view>
+      <view><text class="font-20">长泰会员银卡250积分/小时，金卡150积分/小时；</text></view>
+      <view><text class="font-20">点击 泰会员-会员卡即可注册成为会员，新会员免费赠送250积分哦</text></view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import ParkNo from '@/components/parkNo'
+import auth from '@/api/auth'
+import licensePlate from '@/api/licensePlate'
+export default class home extends wepy.page {
+  config = {
+    navigationBarTitleText: '首页'
+  }
+  data = {
+    banner: {
+      indicatorDots: false,
+      autoplay: true,
+      circular: true,
+      interval: 5000,
+      duration: 1000,
+      list: ['../assets/image/img-01.png', '../assets/image/img-02.png']
+    },
+    historyData: []
+  }
+  components = {
+    parkno: ParkNo
+  }
+  methods = {
+    getLocation () {
+      wepy.getLocation({
+        type: 'gcj02', // 返回可以用于wx.openLocation的经纬度
+        success: function(res) {
+          var latitude = res.latitude
+          var longitude = res.longitude
+          wepy.openLocation({
+            latitude: latitude,
+            longitude: longitude,
+            scale: 28
+          })
+        }
+      })
+    },
+    scanCode () {
+      wepy.scanCode({
+        success: (res) => {
+          console.log(res)
+        }
+      })
+    }
+  }
+  async onLoad () {
+    await auth.login()
+    let history = await licensePlate.historyCars()
+    this.historyData = history.list
+    this.$apply()
+  }
+}
+</script>

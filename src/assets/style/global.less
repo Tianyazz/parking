@@ -1,0 +1,137 @@
+/* 计算单位:rpx */
+@defaultWidth: 640;
+@scale: 750 / 640;
+.font-size (@px: 24) {
+  font-size: unit(@scale * @px, rpx);
+}
+.width (@px: 0) {
+  width: unit(@scale * @px, rpx);
+}
+.height (@px: 0) {
+  height: unit(@scale * @px, rpx);
+}
+.line-height (@px: 36) {
+  line-height: unit(@scale * @px, rpx);
+}
+/* 圆角 */
+.radius( @r: 10rpx ) {
+  -webkit-border-radius: @r * @scale;
+     -moz-border-radius: @r * @scale;
+          border-radius: @r * @scale;
+      -ms-border-radius: @r * @scale;
+}
+
+/* 阴影 */
+.shadow( @x: 0rpx, @y: 0rpx, @z: 20rpx, @b: rgba(0, 0, 0, .1)) {
+  -webkit-box-shadow: @x @y @z @b;
+     -moz-box-shadow: @x @y @z @b;
+          box-shadow: @x @y @z @b;
+      -ms-box-shadow: @x @y @z @b;
+}
+
+/* 位移 */
+.translate( @x: 0, @y: 0) {
+  -webkit-transform: translate( @x, @y );
+     -moz-transform: translate( @x, @y );
+      -ms-transform: translate( @x, @y );
+          transform: translate( @x, @y );
+}
+
+/* 缩放 */
+.scale( @x: 1, @y: 1) {
+  -webkit-transform: scale( @x, @y );
+     -moz-transform: scale( @x, @y );
+      -ms-transform: scale( @x, @y );
+          transform: scale( @x, @y );
+}
+
+/* 位移加等比缩放 */
+.translateScale( @x: 0, @y: 0, @z: 1) {
+  -webkit-transform: translate( @x, @y ) scale( @z, @z );
+     -moz-transform: translate( @x, @y ) scale( @z, @z );
+      -ms-transform: translate( @x, @y ) scale( @z, @z );
+          transform: translate( @x, @y ) scale( @z, @z );
+}
+
+/* 动画 */
+.transition( @property: all, @s: .35s, @effect: ease) {
+  -webkit-transition: @property @s @effect;
+     -moz-transition: @property @s @effect;
+      -ms-transition: @property @s @effect;
+          transition: @property @s @effect;
+}
+
+/* 旋转 */
+.rotate( @deg: 45deg ) {
+  -webkit-transform: rotate( @deg );
+  -moz-transform: rotate( @deg );
+  -ms-transform: rotate( @deg );
+  transform: rotate( @deg );
+}
+
+/* 左右上下垂直居中 */
+.centerMiddle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  .translate(-50%, -50%);
+}
+
+/* 垂直居中 */
+.middle {
+  position: absolute;
+  top: 50%;
+  .translate(0, -50%);
+}
+
+/* 动画 */
+.animation( @name, @d: .3s, @fun: ease, @delay: 0s, @count: 1, @mode: both ) {
+  -webkit-animation: @name @d @fun @delay @count;
+  -moz-animation: @name @d @fun @delay @count;
+  -ms-animation: @name @d @fun @delay @count;
+  animation: @name @d @fun @delay @count;
+  -webkit-animation-fill-mode: @mode;
+  -moz-animation-fill-mode: @mode;
+  -ms-animation-fill-mode: @mode;
+  animation-fill-mode: @mode;
+}
+
+/* keyframes */
+// .keyframes( @animationName ) {
+//   @-webkit-keyframes #{@animationName} {
+//     @content;
+//   }
+//   @-moz-keyframes #{@animationName} {
+//     @content;
+//   }
+//   @-ms-keyframes #{@animationName} {
+//     @content;
+//   }
+//   @keyframes #{@animationName} {
+//     @content;
+//   }
+// }
+
+/* 弹性盒子模型对其方式 */
+.align-items( @a: center ) {
+  -webkit-align-items: @a;
+  -moz-align-items: @a;
+  align-items: @a;
+}
+.justify-content( @j: center) {
+  -webkit-justify-content: @j;
+  -moz-justify-content: @j;
+  justify-content: @j;
+}
+/* 添加width: 0%; 这样felx就会按照对应的比例分配 */
+.flex( @x: 1 ) {
+  -webkit-box-flex: @x;
+  -webkit-flex: @x;
+  flex: @x;
+  width: 0%;
+}
+.flexs {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}

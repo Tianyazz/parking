@@ -1,0 +1,13 @@
+{
+  "description": "A WePY project",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wxdcb713a74c0cf0a2",
+  "projectname": "parking",
+  "miniprogramRoot": "./dist"
+}

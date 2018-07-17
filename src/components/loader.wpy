@@ -1,0 +1,65 @@
+<!-- 加载 2018-07-17 -->
+<style lang="less">
+@import '../assets/style/global';
+.loader::before,
+.loader::after,
+.loader {
+  border-radius: 50%;
+  width: 25rpx;
+  height: 25rpx;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load 1.8s infinite ease-in-out;
+  animation: load 1.8s infinite ease-in-out;
+}
+.loader {
+  margin: 0 auto 40rpx;
+  position: relative;
+  -webkit-animation-delay: .16s;
+  animation-delay: .16s;
+}
+.loader::before {
+  left: -35rpx;
+}
+.loader::after {
+  left: 35rpx;
+  -webkit-animation-delay: .32s;
+  animation-delay: .32s;
+}
+.loader::before,
+.loader::after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+@-webkit-keyframes load {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 25rpx 0 -13rpx #ff4e4e;
+  }
+  40% {
+    box-shadow: 0 25rpx 0 0 #ff4e4e;
+  }
+}
+@keyframes load {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 25rpx 0 -13rpx #ff4e4e;
+  }
+  40% {
+    box-shadow: 0 25rpx 0 0 #ff4e4e;
+  }
+}
+</style>
+<template>
+  <view class="loader"></view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Loader extends wepy.component {
+  data = {}
+}
+</script>

@@ -1,0 +1,209 @@
+<!-- 账单详情支付页面 2018-07-11 -->
+<style lang="less">
+@import '../assets/style/global';
+.payment {
+  .detail {
+    padding: 0 30rpx;
+    >.font-30 {
+      padding: 20rpx 0;
+      text-align: center;
+    }
+    >view {
+      padding: 20rpx 0;
+      border-top: 1rpx solid #eee;
+      &:first-child {
+        border-top: none;
+      }
+    }
+    .checkboxs {
+    }
+    .checkboxs {
+      .flexs;
+      .width(50);
+      .align-items;
+    }
+    .flexs {
+      .flex {
+        .flexs;
+        .align-items;
+      }
+    }
+  }
+  .title {
+    padding: 0 30rpx;
+    .height(50);
+    .line-height(50);
+    color: #999;
+    background: #eee;
+  }
+  button {
+    width: 100%;
+    margin-top: 50rpx;
+    .radius(0);
+  }
+  .icon {
+    margin-right: 30rpx;
+  }
+}
+</style>
+
+<template>
+  <view class="container payment">
+    <view class="detail">
+      <view class="font-30 col-r"><text>当前费用：&#165;{{computeCostData.cost}}</text></view>
+      <view class="flexs">
+        <view class="flex">停车场</view>
+        <view class="flex j-end">长泰商业广场</view>
+      </view>
+      <view class="flexs">
+        <view class="flex">车牌号</view>
+        <view class="flex j-end">{{computeCostData.car_plate_num}}</view>
+      </view>
+      <view class="flexs">
+        <view class="flex">入场时间</view>
+        <view class="flex j-end">{{computeCostData.in_time}}</view>
+      </view>
+      <view class="flexs">
+        <view class="flex">支付时间</view>
+        <view class="flex j-end">{{computeCostData.out_time}}</view>
+      </view>
+    </view>
+    <view class="title font-22" wx:if="{{computeCostData.cost !== 0}}">请选择支付方式</view>
+    <view class="detail" wx:if="{{computeCostData.cost !== 0}}">
+      <view class="flexs" wx:if="{{computeCostData.coupon_data.count !== 0}}">
+        <label class="flex" for="coupon"><text class="icon font-30">&#xe618;</text>优惠券:&#160;<text class="col-r" wx:if="{{!couponBoxOption.isChecked}}">{{computeCostData.coupon_data.count}}张</text><text class="col-r" wx:else>{{ couponVal }}</text></label>
+        <checkbox-group bindchange="selectCoupon">
+          <view class="checkboxs"><checkbox class="checkboxs" value="" id="coupon" checked="{{couponBoxOption.isChecked}}" /></view>
+        </checkbox-group>
+      </view>
+      <view class="flexs {{computeCostData.integral_data.is_usable === 0 ? 'disabled' : ''}}" wx:if="{{computeCostData.integral_data.integral_num != 0}}">
+        <label for="integral" class="flex"><text class="icon font-30">&#xe616;</text>积分:&#160;<text class="col-r">{{integral.val}}</text></label>
+        <checkbox-group bindchange="selectIntegral">
+          <view class="checkboxs"><checkbox class="checkboxs" value="" id="integral" /></view>
+        </checkbox-group>
+      </view>
+      <view class="flexs" hidden="{{!couponBoxOption.isChecked && !integral.isUse}}">
+        <label class="flex"><text class="icon font-30">&#xe602;</text>需支付:&#160;<text class="col-r">￥{{computeCostData.payment}}</text></label>
+      </view>
+      <button class="btn" type="primary" @tap="pay" wx:if="+computeCostData.cost !== 0">立即支付</button>
+    </view>
+    <coupon :option.sync="couponBoxOption"
+    @selectedCoupon.user="selectedCoupon"></coupon>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import CouponBox from '@/components/couponBox'
+import licensePlate from '@/api/licensePlate'
+export default class payment extends wepy.page {
+  config = {
+    navigationBarTitleText: '支付'
+  }
+  data = {
+    couponBoxOption: {
+      isShow: false, // 优惠券选择框状态
+      radioVal: 0,
+      isChecked: false, // 选择优惠券选择框状态
+      couponData: []
+    },
+    couponVal: '', // 是有优惠券，优惠值
+    integral: {
+      isUse: false, // 是否使用低分抵扣
+      val: '' // 积分
+    },
+    computeCostData: {
+      coupon_data: {
+        count: 0
+      }
+    },
+    apiParam: {
+      car_plate_num: '', // 牌照
+      member_coupon_id: '', // 优惠券ID
+      is_use_integral: '' // 是否使用积分
+    }
+  }
+  components = {
+    coupon: CouponBox
+  }
+  methods = {
+    // 选择优惠券
+    selectCoupon (e) {
+      this.couponBoxOption.isShow = true
+      // this.couponBoxOption.isShow = this.isUseCoupon = this.isSelected(e)
+    },
+    // 选择积分抵扣
+    selectIntegral (e) {
+      this.integral.isUse = this.isSelected(e)
+      this.integral.isUse ? this.apiParam.is_use_integral = 1 : this.apiParam.is_use_integral = 0
+      this.parkNoFee()
+    },
+    // 立即支付
+    async pay () {
+      console.log(wepy)
+      let param = {
+        // payment: this.computeCostData.payment,
+        payment: '0.01',
+        ...this.apiParam
+      }
+      let config = await licensePlate.getPayJsConfig(param)
+      wepy.requestPayment({
+        'timeStamp': config.timeStamp,
+        'nonceStr': config.nonceStr,
+        'package': config.package,
+        'signType': config.signType,
+        'paySign': config.paySign,
+        'success': (res) => {
+          console.log('res', res)
+        },
+        'fail': (err) => {
+          console.log('err', err)
+        }
+      })
+    },
+    // 选择优惠券 获取优惠券的值
+    selectedCoupon (id, text) {
+      id === 0 ? this.apiParam.member_coupon_id = '' : this.apiParam.member_coupon_id = id
+      this.couponVal = text
+      this.parkNoFee()
+    }
+  }
+  async onLoad () {
+    this.parkNoFee()
+  }
+  // 是否选中复选框
+  isSelected (e) {
+    if (!e.detail.value.length) {
+      return false
+    } else {
+      return true
+    }
+  }
+  // 查询车牌在停车场产生的费用
+  async parkNoFee () {
+    await wepy.getStorage({key: 'parkNo'})
+      .then(res => {
+        this.apiParam.car_plate_num = res.data
+      })
+    let info = await licensePlate.InquiryFee(this.apiParam)
+    this.computeCostData = info
+    this.couponBoxOption.couponData = info.coupon_data.list
+    this.useIntegral(info)
+    this.$apply()
+  }
+  // 使用积分抵扣
+  useIntegral (data) {
+    if (!this.integral.isUse) { // 判断是否使用积分
+      this.integral.val = data.integral_data.integral_num // 不适用积分，显示积分值
+    } else {
+      if (data.use_integral === 0) { // 使用积分判断，是否需要抵扣
+        this.integral.val = data.integral_data.integral_num
+        this.integral.isUse = false
+        console.log('不需要再使用积分抵扣')
+      } else { // 显示积分抵扣值
+        this.integral.val = `-${data.use_integral}`
+      }
+    }
+  }
+}
+</script>

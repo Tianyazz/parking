@@ -1,0 +1,88 @@
+<style lang="less">
+@import './assets/style/common';
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+import { setStore } from 'wepy-redux'
+import configStore from './store'
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/home', // 首页
+      'pages/payment', // 支付
+      'pages/coupon', // 优惠券
+      'pages/integral', // 积分
+      'pages/bill/bill', // 历史账单
+      'pages/bill/detail' // 历史账单详情
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    }
+  }
+
+  globalData = {
+    userInfo: null,
+    token: '',
+    baseUrl: 'http://mallservice.chamshare.cn'
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
+
+  onLaunch() {
+    this.testAsync()
+    this.getToken()
+  }
+
+  // 获取是否已有登陆信息
+  async getToken () {
+    await wepy.getStorage({key: 'token'})
+      .then(res => {
+        this.globalData.token = res.data ? res.data : ''
+      })
+      .catch(err => {
+        console.log('err', err)
+      })
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

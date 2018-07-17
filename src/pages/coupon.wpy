@@ -1,0 +1,138 @@
+<!-- 长泰停车 优惠券页 2018-04-23 -->
+<style lang="less">
+@import '../assets/style/global';
+.coupon {
+  padding: 0 20rpx;
+  >text {
+    display: block;
+    margin-bottom: 20rpx;
+  }
+  >view.center {
+    padding: 10rpx 0 20rpx;
+    text-align: center;
+  }
+  >.list {
+    position: relative;
+    padding: 20rpx 15rpx;
+    .radius;
+    margin-bottom: 20rpx;
+    background: #ff4e4e;
+    color: #fff;
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 166rpx;
+      width: 12rpx;
+      height: 12rpx;
+      .radius(6rpx);
+      background: #fff;
+    }
+    &::before {
+      top: -4rpx;
+    }
+    &::after {
+      bottom: -4rpx;
+    }
+    .flex-c-m {
+      width: 160rpx;
+      border-right: 1rpx dashed #fff;
+      view {
+        text-align: center;
+      }
+      text {
+        font-size: 24rpx;
+      }
+    }
+    .flex {
+      padding: 20rpx;
+      >view {
+        .align-items;
+        text {
+          margin-right: 20rpx;
+          veritical-align: middle;
+        }
+      }
+    }
+    view.time-limit {
+      padding-left: 20rpx;
+      margin-top: 10rpx;
+      .font-size(20);
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="container coupon">
+    <text class="col-3 font-30">电子券</text>
+    <block wx:for="{{couponData}}" wx:for-index="idx" wx:key="idx">
+      <view class="list">
+        <view class="flexs">
+          <view class="flex-c-m">
+            <view>
+              <view class="font-36">{{item.deduct_money}}{{item.coupon_type === 2 ? '小时' : '元'}}</view>
+              <text>停车优惠券</text>
+            </view>
+          </view>
+          <view class="flex">
+            <view class="flexs"><text class="icon font-36">&#xe61c;</text>长泰国际商业广场</view>
+          </view>
+        </view>
+        <view class="time-limit">有效日期: {{ item.valid_stime }}至{{ item.valid_etime }}</view>
+      </view>
+    </block>
+    <view wx:if="{{noMoreData}}" class="center">没有更多数据</view>
+    <loader wx:else />
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Loader from '@/components/loader'
+import coupon from '@/api/coupon'
+export default class CouponList extends wepy.page {
+  config = {
+    navigationBarTitleText: '优惠券',
+    window: {
+      backgroundTextStyle: 'dark',
+      enablePullDownRefresh: true,
+      onReachBottomDistance: -100
+    }
+  }
+  data = {
+    apiParam: {
+      page: 1,
+      page_size: 10
+    },
+    noMoreData: false,
+    couponData: []
+  }
+  components = {
+    loader: Loader
+  }
+  methods = {
+    onPullDownRefresh () {
+      wepy.showNavigationBarLoading()
+      console.log(1)
+    },
+    onReachBottom () {
+      if (this.noMoreData) return console.log('没有更多数据')
+      setTimeout(() => {
+        this.getCouponList()
+      }, 1500)
+    }
+  }
+  async onLoad () {
+    this.getCouponList()
+  }
+  async getCouponList () {
+    let couponData = await coupon.getCoupon(this.apiParam)
+    this.couponData = [...this.couponData, ...couponData.list]
+    if (couponData.list.length < this.apiParam.page_size) this.noMoreData = true
+    this.$apply()
+    this.apiParam.page++
+  }
+}
+</script>

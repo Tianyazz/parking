@@ -1,0 +1,166 @@
+<!-- 选择优惠券弹出窗口 2018-07-12 -->
+<style lang="less" scoped>
+@import '../assets/style/global';
+.cou-popups {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  .scale(1.2, 1.2);
+  .transition;
+  &.show {
+    z-index: 99;
+    opacity: 1;
+    .scale(1, 1);
+    background: rgba(0, 0, 0, .5);
+  }
+  .radios {
+    .width(30);
+    .height(30);
+    .radius(16rpx);
+    overflow: hidden;
+    background: #fff;
+    &::before {
+      content: "\e93e";
+      position: relative;
+      top: -1rpx;
+      left: 3rpx;
+      .transition;
+      color: #fff;
+      font-family: "iconfont";
+      font-size: 30rpx;
+      line-height: 30rpx;
+      font-weight: bold;
+    }
+    &.current::before {
+      color: #ff4e4e;
+    }
+  }
+  .content {
+    .centerMiddle;
+    .width(580);
+    >.flexs {
+      padding: 15rpx 40rpx 15rpx 20rpx;
+      border-bottom: 1px solid #eee;
+      background: #f1f1f1;
+    }
+    .ul {
+      max-height: 640rpx;
+      overflow-y: scroll;
+      margin-bottom: 19rpx;
+    }
+    .li {
+      position: relative;
+      margin: 20rpx 20rpx 0;
+      .radius;
+      background: #ff4e4e;
+      >view.font-20 {
+        padding: 10rpx 0;
+        margin: 0 20rpx;
+        border-top: 1px dashed #fff;
+      }
+      view.center {
+        margin-right: 20rpx;
+        text-align: center;
+      }
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 50rpx;
+        .width(16);
+        height: 16rpx;
+        .radius(8rpx);
+        background: #fff;
+      }
+      &:before {
+        left: 0;
+        .translate(-50%, 50%);
+      }
+      &:after {
+        right: 0;
+        .translate(50%, 50%);
+      }
+      text.icon {
+        vertical-align: middle;
+        margin-right: 20rpx;
+      }
+    }
+    .flex-c-m {
+      padding: 10rpx 20rpx;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="cou-popups {{option.isShow ? 'show' : ''}}">
+    <view class="bg-fff content">
+      <view class="flexs" @tap="radioChange({{0}})">
+        <view class="flex col-3">不使用优惠券{{option.isShow}}</view>
+        <view class="radios {{option.radioVal === 0 ? 'current' : ''}}"></view>
+      </view>
+      <view class="col-f ul">
+        <block wx:for="{{option.couponData}}" wx:for-index="index" wx:key="index">
+          <view class="li" @tap="radioChange({{item.member_coupon_id}}, {{item.deduct_money}}, {{item.coupon_type}})">
+            <view class="flex-c-m">
+              <view class="center">
+                <view wx:if="item.coupon_type === 2">{{item.deduct_money}}小时</view>
+                <view wx:else>￥{{item.deduct_money}}</view>
+                <view class="font-20">停车优惠券</view>
+              </view>
+              <view class="flex"><view><text class="icon font-36">&#xe61c;</text>长泰国际商业广场</view></view>
+              <view class="radios {{option.radioVal === item.member_coupon_id ? 'current' : ''}}"></view>
+            </view>
+            <view class="font-20">有效日期: {{item.valid_stime}}至{{item.valid_etime}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class CouponBox extends wepy.component {
+  props = {
+    option: {
+      type: Object,
+      default: {
+        isShow: {
+          type: Boolean,
+          default: false
+        },
+        radioVal: {
+          type: Number,
+          default: 0
+        },
+        isChecked: {
+          type: Boolean,
+          default: false
+        },
+        couponData: {
+          type: Array,
+          default: []
+        }
+      },
+      twoWay: true
+    }
+  }
+  data = {}
+  methods = {
+    radioChange (id, money, type) {
+      let text = ''
+      this.option.radioVal = id
+      this.option.isShow = false
+      !id ? this.option.isChecked = false : this.option.isChecked = true
+      if (id !== 0) type === 2 ? text = `减免${money}小时` : text = `￥-${money}`
+      this.$emit('selectedCoupon', id, text)
+    }
+  }
+}
+</script>

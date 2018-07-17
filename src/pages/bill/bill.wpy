@@ -1,0 +1,109 @@
+<!-- 长泰停车 历史账单 2018-04-23 -->
+<style lang="less">
+@import '../../assets/style/global';
+.bill-list {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 0 20rpx;
+  .center {
+    text-align: center
+  }
+  .bill {
+    margin-bottom: 30rpx;
+    .shadow(0rpx, 10rpx, 20rpx, rgba(0, 0, 0, .15));
+    &::first-child {
+      margin-top: 30rpx;
+    }
+  }
+  .bill-list-top {
+    background: #ff4e4e;
+    >view {
+      padding: 20rpx 30rpx 0 30rpx;
+    }
+    .center {
+      .font-size(52);
+      padding: 27rpx 0 47rpx 0;
+    }
+  }
+  .bill-list-bottom {
+    padding: 30rpx 20rpx 20rpx;
+    view {
+      padding: 5rpx 0;
+      text {
+        margin-left: 20rpx;
+      }
+    }
+    view.seeDetail {
+      position: relative;
+      margin-top: 10rpx;
+      &::before {
+        content: '\e620';
+        position: absolute;
+        right: 0;
+        font-family: 'iconfont';
+        color: #999;
+        font-weight: bold;
+      }
+    }
+  }
+  >div.center {
+    padding-top: 80rpx;
+    i {
+      .font-size(160);
+      color: #c3c3c3;
+    }
+    h2 {
+      margin-top: 30rpx;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="container bill-list">
+    <block wx:for="{{billData}}" wx:for-index="idx" wx:key="idx">
+      <view class="bill">
+        <view class="bill-list-top col-f">
+          <view class="flexs">
+            <text>支付成功</text>
+            <text class="flex j-end font-20">{{item.create_time}}</text>
+          </view>
+          <view class="center">{{ item.paid_amount }}元</view>
+        </view>
+        <view class="bill-list-bottom">
+          <view>付款方式:<text class="col-3">{{item.pay_type_text}}</text></view>
+          <view>停车场:<text class="col-3">长泰国际商业广场</text></view>
+          <view class="col-3 seeDetail" @tap="seeDetail({{item}})">查看详情</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import bills from '@/api/bills'
+export default class bill extends wepy.page {
+  config = {
+    navigationBarTitleText: '历史账单'
+  }
+  data = {
+    title: 'Levae the world',
+    billData: []
+  }
+  methods = {
+    seeDetail (item) {
+      wepy.setStorage({key: 'billDetail', data: item})
+      wepy.navigateTo({
+        url: '/pages/bill/detail'
+      })
+    }
+  }
+  async onLoad () {
+    let billListData = await bills.getBills()
+    this.billData = billListData.list
+    this.$apply()
+  }
+}
+</script>

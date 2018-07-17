@@ -1,0 +1,71 @@
+<!-- 长泰停车 积分页 2018-04-23 -->
+<style lang="less">
+@import '../assets/style/global';
+.integral {
+  padding: 80rpx 20rpx 0;
+  .content {
+    position: relative;
+    padding: 100rpx 0 30rpx;
+    margin-bottom: 20rpx;
+    .shadow(0rpx, 0rpx, 20rpx, rgba(0, 0, 0, .3));
+    background: #ff4e4e;
+    .icon {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 110rpx;
+      height: 110rpx;
+      .radius(55rpx);
+      .shadow(0rpx, 10rpx, 20rpx, rgba(0, 0, 0, .15));
+      .translate(-50%, -50%);
+      color: #ff4e4e;
+      .font-size(60);
+      line-height: 110rpx;
+      background: #fff;
+    }
+    .font-36 {
+      margin-bottom: 10rpx;
+    }
+  }
+  .center {
+    text-align: center;
+  }
+  button {
+    width: 100%;
+    .radius(0);
+  }
+}
+</style>
+
+<template>
+  <view class="container integral">
+    <view class="content col-f center">
+      <text class="icon">&#xe616;</text>
+      <view class="font-36">当前积分: {{ integralInfo.intergral_num }}</view>
+      <view>会员手机号: {{ integralInfo.phone }}</view>
+    </view>
+    <button class="btn disabled" type="primary">立即换绑</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import MyIntegral from '@/api/integral'
+export default class integral extends wepy.page {
+  config = {
+    navigationBarTitleText: '积分'
+  }
+  data = {
+    title: 'Levae the world',
+    integralInfo: {
+      intergral_num: 999,
+      phone: 1883284242
+    }
+  }
+  async onLoad () {
+    let data = await MyIntegral.getIntegral()
+    this.integralInfo = data
+    this.$apply()
+  }
+}
+</script>

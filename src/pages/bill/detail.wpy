@@ -1,0 +1,75 @@
+<!-- 长泰停车 历史账单详情 2018-05-23 -->
+<style lang="less">
+@import '../../assets/style/global';
+.bill-detail {
+  padding: 0 20rpx;
+  .flexs {
+    .height(80);
+    .align-items;
+    border-bottom: 1rpx solid #eee;
+    padding: 0 10rpx;
+    >view {
+      .width(150)
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="container bill-detail">
+    <view class="flexs">
+      <view>车牌号:</view>
+      <view class="flex col-3 j-end">{{detail.car_plate_num}}</view>
+    </view>
+    <view class="flexs">
+      <view>入场时间:</view>
+      <view class="flex col-3 j-end">{{detail.in_time}}</view>
+    </view>
+    <view class="flexs">
+      <view>支付时间:</view>
+      <view class="flex col-3 j-end">{{detail.out_time}}</view>
+    </view>
+    <view class="flexs">
+      <view>优惠券减免:</view>
+      <view class="flex col-3 j-end">￥{{detail.coupon_free }}</view>
+    </view>
+    <view class="flexs">
+      <view>积分减免:</view>
+      <view class="flex col-3 j-end">￥{{detail.intergral_free}}</view>
+    </view>
+    <view class="flexs">
+      <view>停车时长:</view>
+      <view class="flex col-3 j-end">{{detail.duration}}</view>
+    </view>
+    <view class="flexs">
+      <view>应缴:</view>
+      <view class="flex col-3 j-end">{{detail.payable_amount}}</view>
+    </view>
+    <view class="flexs">
+      <view>实缴:</view>
+      <view class="flex col-3 j-end">{{detail.paid_amount}}</view>
+    </view>
+    <view class="flexs">
+      <view>单号:</view>
+      <view class="flex col-3 j-end">{{ detail.order_no }}</view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class billDetail extends wepy.page {
+  config = {
+    navigationBarTitleText: '历史账单'
+  }
+  data = {
+    title: 'Levae the world',
+    detail: {}
+  }
+  async onLoad () {
+    await wepy.getStorage({key: 'billDetail'})
+      .then(res => {
+        this.detail = res.data
+      })
+  }
+}
+</script>
