@@ -12,9 +12,9 @@ export default class Auth extends base {
   */
   static async login () {
     let token = this.getConfig('token')
-    if (token === '') {
+    if (!token) {
       let data = await this.doLogin()
-      this.setConfig('token', data.token)
+      return this.setConfig('token', data.token)
     }
   }
   /*
