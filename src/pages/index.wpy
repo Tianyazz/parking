@@ -18,11 +18,13 @@
 <template>
   <view class="container">
     <navigator url="/pages/home">首页</navigator>
+    <open-data type="userNickName"></open-data>
+    <open-data type="userCity"></open-data>
     <view class="userinfo" @tap="handleViewTap">
       <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
       <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
     </view>
-    <button open-type="getUserInfo">授权</button>
+    <button open-type="getUserInfo" bindgetuserinfo="onGotUserInfo">授权</button>
     <!-- <open-data type="userAvatarUrl"></open-data> -->
 
     <panel>
@@ -226,6 +228,9 @@
       counterEmit (...args) {
         let $event = args[args.length - 1]
         console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      },
+      onGotUserInfo (e) {
+        this.userInfo = wepy.$instance.globalData['userInfo'] = e.detail.userInfo
       }
     }
 
@@ -244,7 +249,7 @@
         wepy.getUserInfo()
           .then(res => {
             console.log('userInfo', res.userInfo)
-            self.userInfo = res.userInfo
+            self.userInfo = wepy.$instance.globalData['userInfo'] = res.userInfo
             self.normalTitle = '标题已被修改'
             self.setTimeoutTitle = '标题三秒后会被修改'
             setTimeout(() => {

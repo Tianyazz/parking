@@ -84,7 +84,7 @@
       </view>
     </block>
     <view wx:if="{{noMoreData}}" class="center">没有更多数据</view>
-    <loader wx:else />
+    <loader wx:else></loader>
   </view>
 </template>
 
@@ -113,10 +113,12 @@ export default class CouponList extends wepy.page {
     loader: Loader
   }
   methods = {
+    // 下拉刷新无效
     onPullDownRefresh () {
       wepy.showNavigationBarLoading()
       console.log(1)
     },
+    // 上拉加载
     onReachBottom () {
       if (this.noMoreData) return console.log('没有更多数据')
       setTimeout(() => {
@@ -131,8 +133,8 @@ export default class CouponList extends wepy.page {
     let couponData = await coupon.getCoupon(this.apiParam)
     this.couponData = [...this.couponData, ...couponData.list]
     if (couponData.list.length < this.apiParam.page_size) this.noMoreData = true
-    this.$apply()
     this.apiParam.page++
+    this.$apply()
   }
 }
 </script>

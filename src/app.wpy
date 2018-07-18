@@ -15,8 +15,8 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index',
       'pages/home', // 首页
+      'pages/index',
       'pages/payment', // 支付
       'pages/coupon', // 优惠券
       'pages/integral', // 积分
@@ -52,9 +52,10 @@ export default class extends wepy.app {
   async getToken () {
     await wepy.getStorage({key: 'token'})
       .then(res => {
-        this.globalData.token = res.data ? res.data : ''
+        this.globalData.token = res.data ? res.data : null
       })
       .catch(err => {
+        this.globalData.token = null
         console.log('err', err)
       })
   }

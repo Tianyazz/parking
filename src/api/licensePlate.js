@@ -11,6 +11,7 @@ export default class LicensePlate extends base {
   * 获取历史牌照列表
   */
   static async historyCars () {
+    // let token = await this.getConfig('token')
     let param = {
       token: this.getConfig('token')
     }
