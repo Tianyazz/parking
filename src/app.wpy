@@ -34,7 +34,7 @@ export default class extends wepy.app {
   globalData = {
     userInfo: null,
     token: '',
-    baseUrl: 'http://mallservice.chamshare.cn'
+    baseUrl: 'http://service.chamshare.cn'
   }
 
   constructor () {

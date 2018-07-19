@@ -5,7 +5,7 @@
 */
 import wepy from 'wepy'
 import md5 from 'blueimp-md5'
-const key = 'Zq9&W*a3xP3xxceg#Q9JCzI4d'
+const key = ''
 export default class Http {
   static async request (method, url, data) {
     const param = {

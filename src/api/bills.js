@@ -17,7 +17,7 @@ export default class Bills extends base {
       page: 1,
       page_size: 10
     }
-    let billList = await this.post(`${this.baseUrl}/park/Order/query`, param)
+    let billList = await this.post(`${this.baseUrl}/park/order/query`, param)
     return billList
   }
 }
