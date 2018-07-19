@@ -74,6 +74,7 @@ import wepy from 'wepy'
 import ParkNo from '@/components/parkNo'
 import auth from '@/api/auth'
 import licensePlate from '@/api/licensePlate'
+import coupon from '@/api/coupon'
 export default class home extends wepy.page {
   config = {
     navigationBarTitleText: '首页'
@@ -110,7 +111,24 @@ export default class home extends wepy.page {
     scanCode () {
       wepy.scanCode({
         success: (res) => {
-          console.log(res)
+          let param = {
+            coupon_str: res.result
+          }
+          coupon.drawCoupon(param)
+            .then(res => {
+              return wepy.showToast({
+                title: '领取成功',
+                icon: 'none',
+                duration: 2000
+              })
+            })
+            .catch(err => {
+              wepy.showToast({
+                title: err.message,
+                icon: 'none',
+                duration: 2000
+              })
+            })
         }
       })
     }
