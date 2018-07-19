@@ -7,4 +7,4 @@
 4、账单列表
 ![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/1.jpg)
 ![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/2.jpg)
-![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/img-01.png)
+![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/3.jpg)
