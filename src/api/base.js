@@ -16,8 +16,8 @@ export default class Base {
   static async setConfig (key, value) {
     await wepy.setStorage({key: key, data: value})
     wepy.$instance.globalData[key] = value
+    return value
   }
-  // static 
   /*
   * 获取全局数据
   */
