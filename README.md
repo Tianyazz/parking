@@ -6,5 +6,5 @@
 3、支付，优惠券、积分抵扣
 4、账单列表
 ![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/1.jpg)
-![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/1.jpg)
-![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/1.jpg)
+![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/2.jpg)
+![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/3.jpg)
