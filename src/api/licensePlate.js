@@ -15,7 +15,7 @@ export default class LicensePlate extends base {
     let param = {
       token: this.getConfig('token')
     }
-    let data = await this.post(`${this.baseUrl}/park/Content/recentCar`, param)
+    let data = await this.post(`${this.baseUrl}/park/Content/Car`, param)
     return data
   }
   /*
@@ -30,7 +30,7 @@ export default class LicensePlate extends base {
       token: token,
       ...param
     }
-    let fee = await this.post(`${this.baseUrl}/park/Order/computeCost`, params)
+    let fee = await this.post(`${this.baseUrl}/park/Order/Cost`, params)
     return fee
   }
   /*
@@ -42,7 +42,7 @@ export default class LicensePlate extends base {
       token: token,
       ...param
     }
-    let config = await this.post(`${this.baseUrl}/park/Pay/getPayJs`, params)
+    let config = await this.post(`${this.baseUrl}/park/Pay/getJs`, params)
     return config
   }
 }
