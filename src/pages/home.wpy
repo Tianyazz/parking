@@ -62,9 +62,9 @@
     </view>
     <view class="explanation">
       <view><text class="font-24 col-3">缴费说明：</text></view>
-      <view><text class="font-20">自2017年8月1日起，长泰停车费调整至6元/小时；</text></view>
-      <view><text class="font-20">长泰会员银卡250积分/小时，金卡150积分/小时；</text></view>
-      <view><text class="font-20">点击 泰会员-会员卡即可注册成为会员，新会员免费赠送250积分哦</text></view>
+      <view><text class="font-20">自2017年8月1日起，**停车费调整至16元/小时；</text></view>
+      <view><text class="font-20">**会员银卡1250积分/小时，金卡550积分/小时；</text></view>
+      <view><text class="font-20">点击 会员-会员卡即可注册成为会员，新会员免费赠送2500积分哦</text></view>
     </view>
   </view>
 </template>
