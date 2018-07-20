@@ -23,7 +23,7 @@ export default class Auth extends base {
   static async doLogin () {
     let login = await wepy.login()
     if (login.code) {
-      let data = this.get(`${this.baseUrl}/vote/Content/getXcxToken`, {
+      let data = this.get(`${this.baseUrl}/vote/Content/getxToken`, {
         code: login.code
       })
       return data
