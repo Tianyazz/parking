@@ -15,7 +15,7 @@ export default class MyIntegral extends base {
     let param = {
       token: token
     }
-    let IntergralData = await this.post(`${this.baseUrl}/park/Content/integral`, param)
+    let IntergralData = await this.post(`${this.baseUrl}/park/Content/myIntegral`, param)
     return IntergralData
   }
 }

@@ -16,7 +16,7 @@ export default class Coupon extends base {
       token: token,
       ...param
     }
-    let couponData = await this.post(`${this.baseUrl}/park/Content/coupon`, params)
+    let couponData = await this.post(`${this.baseUrl}/park/Content/myCoupon`, params)
     return couponData
   }
   /*
