@@ -7,7 +7,7 @@
  wepy + less + iconfont svg
  ## **项目运行**
  ```
- git clone git@github.com:SkinsTY/parking.git
+ git clone git@github.com:Tianyazz/parking.git
  
  cd  parking
  
