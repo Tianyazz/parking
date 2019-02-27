@@ -25,7 +25,7 @@
 ![image](https://github.com/SkinsTY/parking/blob/master/src/assets/image/3.jpg)
 
 ## **说明**
- 第一次写小程序给个star，谢谢
+ 初学小程序，写的一个小项目，给个star，谢谢支持
 
 ## **项目结构**
 ```
